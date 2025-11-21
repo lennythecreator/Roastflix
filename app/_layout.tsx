@@ -1,24 +1,80 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import {
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  useFonts,
+} from "@expo-google-fonts/plus-jakarta-sans";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import { Text, TextInput } from "react-native";
+import "./globals.css";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
-export const unstable_settings = {
-  anchor: '(tabs)',
+let defaultFontApplied = false;
+
+const applyDefaultFont = () => {
+  if (defaultFontApplied) return;
+  defaultFontApplied = true;
+
+  const injectFont = (component: any) => {
+    component.defaultProps = component.defaultProps || {};
+    const existingStyle = component.defaultProps.style;
+    if (Array.isArray(existingStyle)) {
+      component.defaultProps.style = [
+        { fontFamily: "PlusJakartaSans_400Regular" },
+        ...existingStyle,
+      ];
+    } else if (existingStyle) {
+      component.defaultProps.style = [
+        { fontFamily: "PlusJakartaSans_400Regular" },
+        existingStyle,
+      ];
+    } else {
+      component.defaultProps.style = { fontFamily: "PlusJakartaSans_400Regular" };
+    }
+  };
+
+  injectFont(Text);
+  injectFont(TextInput);
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [fontsLoaded, fontError] = useFonts({
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+  });
+
+  useEffect(() => {
+    if (fontError) {
+      console.error("Failed to load fonts", fontError);
+    }
+  }, [fontError]);
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      applyDefaultFont();
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        headerTitleStyle: { fontFamily: "PlusJakartaSans_600SemiBold" },
+        headerStyle: { backgroundColor: "#05030A" },
+        contentStyle: { backgroundColor: "#05030A" },
+      }}
+    >
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="movie/[id]" options={{ headerShown: false }} />
+    </Stack>
   );
 }

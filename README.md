@@ -2,6 +2,24 @@
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+## Project overview
+
+Roastflix is a playful movie companion built with Expo Router and React Native. It pulls live data from The Movie Database (TMDB) to showcase trending titles, lets you jump into detailed views with posters and synopses, and introduces an AI-driven "roast or defend" conversation screen for lighthearted banter about each film.
+
+### Key features
+
+- Grid-based home feed listing the latest movies from TMDB with posters, release dates, and ratings.
+- Search tab with instant refetching to explore additional titles without leaving the app shell.
+- Detail screen that surfaces the selected movie’s artwork, metadata, and quick actions to start a roast/defend session.
+- Conversational screen powered by the `AI` component, which simulates a voice assistant ready to banter about the film.
+- Placeholder tabs for favourites and profile, giving you room to expand into personalized watchlists later.
+
+### Tech stack
+
+- Expo + React Native + Expo Router for cross-platform UI and navigation.
+- NativeWind/Tailwind-style utility classes for theming in `globals.css`.
+- Custom `useFetch` hook plus `services/api.ts` to call TMDB’s REST API with either popular or search endpoints.
+
 ## Get started
 
 1. Install dependencies
